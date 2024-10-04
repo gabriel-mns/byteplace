@@ -48,10 +48,10 @@ public class AuthenticationService {
 
     public AuthenticationResponseDTO login(AuthenticationRequestDTO authenticationRequestDTO) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                authenticationRequestDTO.getUsername(), authenticationRequestDTO.getPassword()
+                authenticationRequestDTO.getEmail(), authenticationRequestDTO.getPassword()
         );
         authenticationManager.authenticate(authToken);
-        User user = repository.findByEmail(authenticationRequestDTO.getUsername()).get();
+        User user = repository.findByEmail(authenticationRequestDTO.getEmail()).get();
         String token = jwtService.generateToken(user, generateExtraClaims(user));
         return new AuthenticationResponseDTO(token);
     }

@@ -1,0 +1,33 @@
+### REGISTER
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+  "name": "Gabriel Martins",
+  "email": "gabriel.martins@example.com",
+  "password": "senhaSegura123",
+  "role": "VENDEDOR"
+}
+
+
+
+
+### AUTHENTICATION
+# @name postAuthentication
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{
+  "email": "gabriel.martins@example.com",
+  "password": "senhaSegura123"
+}
+
+@auth_token = {{postAuthentication.response.body.token}};
+# > {% client.global.set("auth_token", response.body.token); %}
+
+
+### BUSCA PAGINADA DE USUÁRIOS
+GET http://localhost:8080/usuarios?page=0&size=10
+Authorization: Bearer {{auth_token}}
+
+
