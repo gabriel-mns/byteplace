@@ -103,4 +103,25 @@ public class AuthenticationService {
 
     }
 
+    public void updateUser(User updatedUser) {
+        
+        User user = userRepository.findById(updatedUser.getId()).get();
+
+        user.setEmail(updatedUser.getEmail());
+        user.setName(updatedUser.getName());
+        user.setRole(updatedUser.getRole());
+        user.setAddresses(updatedUser.getAddresses());
+        user.getAddresses().forEach(address -> address.setUser(user));
+        user.setPassword(updatedUser.getPassword());
+
+        userRepository.save(user);
+
+    }
+
+    public void deleteUser(Long id) {
+        
+        userRepository.deleteById(id);
+
+    }
+
 }
