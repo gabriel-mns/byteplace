@@ -14,7 +14,7 @@ public enum Role {
     COMPRADOR(Arrays.asList(
             Permission.VISUALIZAR_PRODUTO, Permission.REALIZAR_COMPRA,
             Permission.VISUALIZAR_COMPRAS, Permission.CADASTRAR_USUARIO,
-            Permission.EDITAR_USUARIO, Permission.EXCLUIR_USUARIO)),;
+            Permission.EDITAR_USUARIO, Permission.EXCLUIR_USUARIO));
 
 
     private List<Permission> permissionList;

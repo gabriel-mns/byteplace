@@ -4,6 +4,8 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -13,6 +15,8 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebMvc
+@EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class WebConfig {
     @Bean
     public CorsFilter corsFilter() {

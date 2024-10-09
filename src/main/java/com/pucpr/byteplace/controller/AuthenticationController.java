@@ -3,7 +3,10 @@ package com.pucpr.byteplace.controller;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,13 +52,15 @@ public class AuthenticationController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<Optional<User>> getUserDetails(@PathVariable Long id) {
+    @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
+    public ResponseEntity<Optional<User>> getUserDetails(@PathVariable Long id, Authentication authentication) {
         return ResponseEntity.ok(authService.getUserById(id));
     }
 
     @GetMapping("/user/{id}/address")
-    public ResponseEntity<List<Address>> getAddresses(@PathVariable Long id, @RequestParam(required = false) AddressType addressType) {
+    @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
+    public ResponseEntity<List<Address>> getAddresses(@PathVariable Long id, @RequestParam(required = false) AddressType addressType, Authentication authentication) {
         return ResponseEntity.ok(authService.getUserAddresses(id, addressType));
     }
-    
+
 }

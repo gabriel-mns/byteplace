@@ -95,4 +95,12 @@ public class AuthenticationService {
 
     }
 
+    public boolean isOwner(Long userId, String email) {
+        
+        Optional<User> user = userRepository.findById(userId);
+        
+        return user.isPresent() && user.get().getEmail().equals(email);
+
+    }
+
 }
