@@ -3,10 +3,32 @@ POST http://localhost:8080/auth/register
 Content-Type: application/json
 
 {
-  "name": "Gabriel Martins",
-  "email": "gabriel.martins@example.com",
-  "password": "senhaSegura123",
-  "role": "VENDEDOR"
+  "name": "João das Coves",
+  "email": "couves@example.com",
+  "password": "123456",
+  "role": "VENDEDOR",
+  "addresses": [
+    {
+      "street": "Rua Teste",
+      "number": "123",
+      "complement": "Casa",
+      "district": "Centro",
+      "city": "Curitiba",
+      "state": "PR",
+      "postalCode": "80000000",
+      "addressType": "1"
+    },
+    {
+      "street": "Rua Teste 2",
+      "number": "456",
+      "complement": "Apartamento",
+      "district": "Centro",
+      "city": "Curitiba",
+      "state": "PR",
+      "postalCode": "80000000",
+      "addressType": "0"
+    }
+  ]
 }
 
 
@@ -18,8 +40,8 @@ POST http://localhost:8080/auth/authenticate
 Content-Type: application/json
 
 {
-  "email": "gabriel.martins@example.com",
-  "password": "senhaSegura123"
+  "email": "couves@example.com",
+  "password": "123456"
 }
 
 @auth_token = {{postAuthentication.response.body.token}};
@@ -27,7 +49,29 @@ Content-Type: application/json
 
 
 ### BUSCA PAGINADA DE USUÁRIOS
-GET http://localhost:8080/usuarios?page=0&size=10
+GET http://localhost:8080/auth/user/3
 Authorization: Bearer {{auth_token}}
+
+### Alterar dados do usuário
+PUT http://localhost:8080/auth/user/3
+Content-Type: application/json
+
+{
+  "name": "João das Coves",
+  "email": "couves@example.com",
+  "role": "COMPRADOR",
+  "addresses": [
+    {
+      "street": "Rua 0",
+      "number": "123",
+      "complement": "Casa",
+      "district": "Centro",
+      "city": "Curitiba",
+      "state": "PR",
+      "postalCode": "80000000",
+      "addressType": "1"
+    }
+  ]
+}
 
 
