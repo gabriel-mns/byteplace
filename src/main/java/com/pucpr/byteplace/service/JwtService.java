@@ -1,4 +1,4 @@
-package com.pucpr.byteplace.services;
+package com.pucpr.byteplace.service;
 
 import org.springframework.stereotype.Service;
 
