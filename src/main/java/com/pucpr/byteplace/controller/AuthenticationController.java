@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pucpr.byteplace.dto.AuthenticationRequestDTO;
 import com.pucpr.byteplace.dto.AuthenticationResponseDTO;
+import com.pucpr.byteplace.dto.UserUpdateRequestDTO;
 import com.pucpr.byteplace.enums.AddressType;
 import com.pucpr.byteplace.model.Address;
 import com.pucpr.byteplace.model.User;
@@ -30,7 +31,6 @@ import com.pucpr.byteplace.service.AuthenticationService;
 public class AuthenticationController {
 
     private final AuthenticationService authService;
-
 
     public AuthenticationController(AuthenticationService service) {
         this.authService = service;
@@ -61,8 +61,10 @@ public class AuthenticationController {
 
     @PutMapping("/user/{id}")
     @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
-    public ResponseEntity<Object> updateUser(@PathVariable Long id, Authentication authentication, @RequestBody User user) {
+    public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequestDTO user,  Authentication authentication) {
         
+        user.setId(id);
+
         authService.updateUser(user);
 
         return ResponseEntity.noContent().build();

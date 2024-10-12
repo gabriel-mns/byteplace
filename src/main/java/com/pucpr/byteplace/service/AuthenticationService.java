@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.pucpr.byteplace.dto.AuthenticationRequestDTO;
 import com.pucpr.byteplace.dto.AuthenticationResponseDTO;
+import com.pucpr.byteplace.dto.UserUpdateRequestDTO;
 import com.pucpr.byteplace.enums.AddressType;
 import com.pucpr.byteplace.model.Address;
 import com.pucpr.byteplace.model.User;
@@ -35,8 +36,11 @@ public class AuthenticationService {
         user.setUsername(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(request.getRole());
-        user.setAddresses(request.getAddresses());
-        user.getAddresses().forEach(address -> address.setUser(user));
+        
+        if(request.getAddresses() != null){
+            user.setAddresses(request.getAddresses());
+            user.getAddresses().forEach(address -> address.setUser(user));
+        }
 
         userRepository.save(user);
 
@@ -56,6 +60,9 @@ public class AuthenticationService {
         User user = userRepository.findByEmail(authenticationRequestDTO.getEmail()).get();
 
         String token = jwtService.generateToken(user, generateExtraClaims(user));
+
+        System.out.println("User "+ user.getEmail() +" logged in");
+        System.out.println("Authorities:"+ user.getAuthorities());
 
         return new AuthenticationResponseDTO(token);
 
@@ -103,16 +110,17 @@ public class AuthenticationService {
 
     }
 
-    public void updateUser(User updatedUser) {
+    public void updateUser(UserUpdateRequestDTO updatedUser) {
         
         User user = userRepository.findById(updatedUser.getId()).get();
-
-        user.setEmail(updatedUser.getEmail());
         user.setName(updatedUser.getName());
-        user.setRole(updatedUser.getRole());
-        user.setAddresses(updatedUser.getAddresses());
-        user.getAddresses().forEach(address -> address.setUser(user));
-        user.setPassword(updatedUser.getPassword());
+
+        if(updatedUser.getAddresses() != null){
+    
+            user.removeAllAddresses();
+            updatedUser.getAddresses().forEach(address -> user.addAddress(address));
+            
+        }
 
         userRepository.save(user);
 

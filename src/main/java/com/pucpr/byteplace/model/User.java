@@ -86,4 +86,24 @@ public class User implements UserDetails {
         this.email = username;
     }
 
+    public void addAddress(Address address) {
+
+        address.setUser(this);
+
+        addresses.add(address);
+
+    }
+
+    public void removeAddress(Address address) {
+
+        addresses.remove(address);
+
+    }
+
+    public void removeAllAddresses() {
+
+        addresses.clear();
+
+    }
+
 }
