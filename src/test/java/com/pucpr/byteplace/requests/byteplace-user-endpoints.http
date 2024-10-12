@@ -3,21 +3,11 @@ POST http://localhost:8080/auth/register
 Content-Type: application/json
 
 {
-  "name": "Usuário de Teste",
-  "email": "teste@ex.com",
+  "name": "Usuário Vendedor",
+  "email": "vend@ex.com",
   "password": "123",
-  "role": "COMPRADOR",
+  "role": "VENDEDOR",
   "addresses": [
-    {
-      "street": "Rua 1000",
-      "number": "asd",
-      "complement": "AP",
-      "district": "Centro",
-      "city": "Cascavel",
-      "state": "PR",
-      "postalCode": "854400000",
-      "addressType": "1"
-    }
   ]
 }
 
@@ -30,7 +20,7 @@ POST http://localhost:8080/auth/authenticate
 Content-Type: application/json
 
 {
-  "email": "teste@ex.com",
+  "email": "vend@ex.com",
   "password": "123"
 }
 
@@ -39,7 +29,7 @@ Content-Type: application/json
 
 
 ### BUSCA PAGINADA DE USUÁRIOS
-GET  http://localhost:8080/auth/user/1
+GET  http://localhost:8080/auth/user/3
 Authorization: Bearer {{auth_token}}
 
 

@@ -1,0 +1,51 @@
+### AUTHENTICATION
+# @name postAuthentication
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{
+  "email": "vend@ex.com",
+  "password": "123"
+}
+
+@auth_token = {{postAuthentication.response.body.token}};
+
+
+### PEGAR TODOS OS PRODUTOS
+GET http://localhost:8080/products
+Authorization: Bearer {{auth_token}}
+
+### PEGAR PRODUTO
+GET http://localhost:8080/products/1
+Authorization: Bearer {{auth_token}}
+
+### CADASTRAR PRODUTO
+POST http://localhost:8080/products
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "title": "Produto 3",
+  "description": "Descrição do produto 3",
+  "manufacturer": "Fabricante 3",
+  "price": 10.0,
+  "promotionalPrice": 9.0
+}
+
+### EDITAR PRODUTO
+PUT http://localhost:8080/products/1
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "title": "Produto 1 ALTERADO",
+  "description": "Descrição do produto 1 ALTERADO",
+  "manufacturer": "Fabricante 1 ALTERADO",
+  "price": 10.0,
+  "promotionalPrice": 9.0
+}
+
+### DELETAR PRODUTO
+DELETE http://localhost:8080/products/1
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
