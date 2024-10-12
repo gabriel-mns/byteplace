@@ -33,6 +33,13 @@ public class SecurityFilter {
                     authConfig.requestMatchers(HttpMethod.POST, "/auth/authenticate").permitAll();
                     authConfig.requestMatchers(HttpMethod.POST, "/auth/register").permitAll();
                     authConfig.requestMatchers(HttpMethod.OPTIONS, "/auth/**").permitAll();
+                    authConfig.requestMatchers(HttpMethod.GET, "/auth/user/{id}").hasAuthority(Permission.VISUALIZAR_USUARIO.name());
+                    authConfig.requestMatchers(HttpMethod.GET, "/auth/user/{id}/**").hasAuthority(Permission.VISUALIZAR_USUARIO.name());
+                    authConfig.requestMatchers(HttpMethod.PUT, "/auth/user/{id}").hasAuthority(Permission.EDITAR_USUARIO.name());
+                    authConfig.requestMatchers(HttpMethod.PUT, "/auth/user/{id}/**").hasAuthority(Permission.EDITAR_USUARIO.name());
+                    authConfig.requestMatchers(HttpMethod.POST, "/auth/user/{id}/**").hasAuthority(Permission.EDITAR_USUARIO.name());
+                    authConfig.requestMatchers(HttpMethod.DELETE, "/auth/user/{id}").hasAuthority(Permission.EXCLUIR_USUARIO.name());
+                    authConfig.requestMatchers(HttpMethod.DELETE, "/auth/user/{id}/**").hasAuthority(Permission.EDITAR_USUARIO.name());
                     authConfig.requestMatchers("/error").permitAll();
 
                     authConfig.requestMatchers(HttpMethod.GET, "/product").hasAuthority(Permission.VISUALIZAR_PRODUTO.name());

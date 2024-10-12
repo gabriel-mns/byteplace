@@ -1,5 +1,6 @@
 package com.pucpr.byteplace.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pucpr.byteplace.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "USUARIOS")
+@Table(name = "USUARIO")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -27,10 +28,16 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(unique = true)
     private String email;
     @Setter
     private String password;
-
+    @OneToMany(mappedBy      = "user",
+               cascade       = CascadeType.ALL,
+               fetch         = FetchType.EAGER,
+               orphanRemoval = true)
+    @JsonManagedReference
+    private List<Address> addresses;
     @Enumerated(EnumType.ORDINAL)
     private Role role;
 
@@ -73,6 +80,26 @@ public class User implements UserDetails {
 
     public void setUsername(String username) {
         this.email = username;
+    }
+
+    public void addAddress(Address address) {
+
+        address.setUser(this);
+
+        addresses.add(address);
+
+    }
+
+    public void removeAddress(Address address) {
+
+        addresses.remove(address);
+
+    }
+
+    public void removeAllAddresses() {
+
+        addresses.clear();
+
     }
 
 }

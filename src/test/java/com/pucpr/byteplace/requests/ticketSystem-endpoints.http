@@ -3,10 +3,22 @@ POST http://localhost:8080/auth/register
 Content-Type: application/json
 
 {
-  "name": "Gabriel Martins",
-  "email": "gabriel.martins@example.com",
-  "password": "senhaSegura123",
-  "role": "VENDEDOR"
+  "name": "Usuário de Teste",
+  "email": "teste@ex.com",
+  "password": "123",
+  "role": "COMPRADOR",
+  "addresses": [
+    {
+      "street": "Rua 1000",
+      "number": "asd",
+      "complement": "AP",
+      "district": "Centro",
+      "city": "Cascavel",
+      "state": "PR",
+      "postalCode": "854400000",
+      "addressType": "1"
+    }
+  ]
 }
 
 
@@ -18,8 +30,8 @@ POST http://localhost:8080/auth/authenticate
 Content-Type: application/json
 
 {
-  "email": "gabriel.martins@example.com",
-  "password": "senhaSegura123"
+  "email": "teste@ex.com",
+  "password": "123"
 }
 
 @auth_token = {{postAuthentication.response.body.token}};
@@ -27,7 +39,75 @@ Content-Type: application/json
 
 
 ### BUSCA PAGINADA DE USUÁRIOS
-GET http://localhost:8080/usuarios?page=0&size=10
+GET  http://localhost:8080/auth/user/1
 Authorization: Bearer {{auth_token}}
 
 
+### Alterar dados do usuário
+PUT http://localhost:8080/auth/user/4
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "name": "teste alterado",
+  "addresses": [
+    {
+      "street": "Rua 1000",
+      "number": "asd",
+      "complement": "AP",
+      "district": "Centro",
+      "city": "Cascavel",
+      "state": "PR",
+      "postalCode": "854400000",
+      "addressType": "1"
+    }
+  ]
+}
+
+### DELETAR USUÁRIO
+DELETE http://localhost:8080/auth/user/8
+Authorization: Bearer {{auth_token}}
+
+### GET ENDEREÇOS
+GET http://localhost:8080/auth/user/1/address
+Authorization: Bearer {{auth_token}}
+
+### GET ENDEREÇO
+GET http://localhost:8080/auth/user/1/address/1
+Authorization: Bearer {{auth_token}}
+
+### UPDATE ENDEREÇO
+PUT http://localhost:8080/auth/user/1/address/1
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "street": "Avenida Brasil",
+  "number": "2450",
+  "complement": "Apartmento 100",
+  "district": "Centro",
+  "city": "Cascavel",
+  "state": "PR",
+  "postalCode": "80000000",
+  "addressType": "0"
+}
+
+### CADASTRAR ENDEREÇO
+POST http://localhost:8080/auth/user/1/address
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "street": "Avenida Brasil",
+  "number": "2450",
+  "complement": "Apartmento 100",
+  "district": "Centro",
+  "city": "Cascavel",
+  "state": "PR",
+  "postalCode": "80000000",
+  "addressType": "0"
+}
+
+### DELETAR ENDEREÇO
+DELETE http://localhost:8080/auth/user/1/address/2
+Authorization: Bearer {{auth_token}}

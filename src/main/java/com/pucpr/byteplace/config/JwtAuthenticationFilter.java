@@ -11,7 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.pucpr.byteplace.model.User;
 import com.pucpr.byteplace.repository.UserRepository;
-import com.pucpr.byteplace.services.JwtService;
+import com.pucpr.byteplace.service.JwtService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

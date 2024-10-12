@@ -1,35 +1,126 @@
 package com.pucpr.byteplace.controller;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.pucpr.byteplace.dto.AuthenticationRequestDTO;
 import com.pucpr.byteplace.dto.AuthenticationResponseDTO;
+import com.pucpr.byteplace.dto.UserUpdateRequestDTO;
+import com.pucpr.byteplace.enums.AddressType;
+import com.pucpr.byteplace.model.Address;
 import com.pucpr.byteplace.model.User;
-import com.pucpr.byteplace.services.AuthenticationService;
+import com.pucpr.byteplace.service.AuthenticationService;
+
 
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-    private final AuthenticationService service;
-
+    private final AuthenticationService authService;
 
     public AuthenticationController(AuthenticationService service) {
-        this.service = service;
+        this.authService = service;
     }
 
 
+    /*
+     * 
+     * ENDPOINTS
+     * 
+     */
+
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponseDTO> register(@RequestBody User request) {
-        return ResponseEntity.ok(service.register(request));
+        return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponseDTO> authenticate(@RequestBody AuthenticationRequestDTO request) {
-        return ResponseEntity.ok(service.login(request));
+        return ResponseEntity.ok(authService.login(request));
     }
+
+    @GetMapping("/user/{id}")
+    @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
+    public ResponseEntity<Optional<User>> getUserDetails(@PathVariable Long id, Authentication authentication) {
+        return ResponseEntity.ok(authService.getUserById(id));
+    }
+
+    @PutMapping("/user/{id}")
+    @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
+    public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequestDTO user,  Authentication authentication) {
+        
+        user.setId(id);
+
+        authService.updateUser(user);
+
+        return ResponseEntity.noContent().build();
+        
+    }
+
+    @DeleteMapping("/user/{id}")
+    @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
+    public ResponseEntity<Object> deleteUser(@PathVariable Long id, Authentication authentication) {
+        
+        authService.deleteUser(id);
+
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @GetMapping("/user/{id}/address")
+    @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
+    public ResponseEntity<List<Address>> getAddresses(@PathVariable Long id, @RequestParam(required = false) AddressType addressType, Authentication authentication) {
+        return ResponseEntity.ok(authService.getUserAddresses(id, addressType));
+    }
+
+    @GetMapping("/user/{id}/address/{addressId}")
+    @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
+    public ResponseEntity<Address> getAddress(@PathVariable Long id, @PathVariable Long addressId,Authentication authentication) {
+        return ResponseEntity.ok(authService.getAddress(addressId));
+    }
+
+    @DeleteMapping("/user/{id}/address/{addressId}")
+    @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
+    public ResponseEntity<Object> deleteAddress(@PathVariable Long id, @PathVariable Long addressId, Authentication authentication) {
+        
+        authService.deleteAddress(id, addressId);
+
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @PutMapping("/user/{id}/address/{addressId}")
+    @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
+    public ResponseEntity<Address> updateAddress(@PathVariable Long id, @PathVariable Long addressId, @RequestBody Address newAddress, Authentication authentication) {
+
+        newAddress.setId(addressId);
+
+        authService.updateAddress(newAddress);
+
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @PostMapping("/user/{id}/address")
+    public ResponseEntity<Object> addAddress(@PathVariable Long id, @RequestBody Address newAddress) {
+
+        authService.addAddress(id, newAddress);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+
+    }
+    
 }
