@@ -3,7 +3,7 @@ package com.pucpr.byteplace.controller;
 import java.util.List;
 import java.util.Optional;
 
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.pucpr.byteplace.dto.AuthenticationRequestDTO;
 import com.pucpr.byteplace.dto.AuthenticationResponseDTO;
 import com.pucpr.byteplace.dto.UserUpdateRequestDTO;
@@ -87,4 +86,41 @@ public class AuthenticationController {
         return ResponseEntity.ok(authService.getUserAddresses(id, addressType));
     }
 
+    @GetMapping("/user/{id}/address/{addressId}")
+    @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
+    public ResponseEntity<Address> getAddress(@PathVariable Long id, @PathVariable Long addressId,Authentication authentication) {
+        return ResponseEntity.ok(authService.getAddress(addressId));
+    }
+
+    @DeleteMapping("/user/{id}/address/{addressId}")
+    @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
+    public ResponseEntity<Object> deleteAddress(@PathVariable Long id, @PathVariable Long addressId, Authentication authentication) {
+        
+        authService.deleteAddress(id, addressId);
+
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @PutMapping("/user/{id}/address/{addressId}")
+    @PreAuthorize("@authenticationService.isOwner(#id, #authentication.name)")
+    public ResponseEntity<Address> updateAddress(@PathVariable Long id, @PathVariable Long addressId, @RequestBody Address newAddress, Authentication authentication) {
+
+        newAddress.setId(addressId);
+
+        authService.updateAddress(newAddress);
+
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @PostMapping("/user/{id}/address")
+    public ResponseEntity<Object> addAddress(@PathVariable Long id, @RequestBody Address newAddress) {
+
+        authService.addAddress(id, newAddress);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+
+    }
+    
 }

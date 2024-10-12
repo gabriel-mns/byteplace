@@ -132,4 +132,34 @@ public class AuthenticationService {
 
     }
 
+    public void deleteAddress(Long userId, Long addressId) {
+
+        addressRepository.deleteById(addressId);
+
+    }
+
+    public Address getAddress(Long addressId) {
+        
+        return addressRepository.findById(addressId).get();
+
+    }
+
+    public void updateAddress(Address newAddress) {
+        
+        addressRepository.save(newAddress);
+
+    }
+
+    public void addAddress(Long userId, Address newwAddress) {
+       
+        User user = userRepository.findById(userId).get();
+
+        newwAddress.setUser(user);
+
+        user.addAddress(newwAddress);
+
+        userRepository.save(user);
+        
+    }
+
 }

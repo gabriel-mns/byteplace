@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,22 +30,14 @@ public class Address {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String postalCode;
-
-    private String state;
-
-    private String city;
-
-    private String street;
-
-    private String number;
-
-    private String district;
-
-    private String complement;
-
+    private Long id;    
+    private String postalCode;    
+    private String state;    
+    private String city;    
+    private String street;    
+    private String number;    
+    private String district;    
+    private String complement;    
     @Enumerated(EnumType.ORDINAL)
     private AddressType addressType;
 
@@ -52,6 +45,14 @@ public class Address {
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
+
+    @PreRemove
+    public void beforeDelete() {
+        if (user != null) {
+            user.getAddresses().remove(this);
+            System.out.println("Removed address from user's address list");
+        }
+    }
 
 
 }

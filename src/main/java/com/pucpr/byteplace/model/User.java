@@ -27,21 +27,17 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
+    @Column(unique = true)
     private String email;
-
     @Setter
     private String password;
-
     @OneToMany(mappedBy      = "user",
                cascade       = CascadeType.ALL,
                fetch         = FetchType.EAGER,
                orphanRemoval = true)
     @JsonManagedReference
     private List<Address> addresses;
-
     @Enumerated(EnumType.ORDINAL)
     private Role role;
 
