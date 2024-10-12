@@ -3,32 +3,10 @@ POST http://localhost:8080/auth/register
 Content-Type: application/json
 
 {
-  "name": "João das Coves",
-  "email": "couves@example.com",
-  "password": "123456",
-  "role": "VENDEDOR",
-  "addresses": [
-    {
-      "street": "Rua Teste",
-      "number": "123",
-      "complement": "Casa",
-      "district": "Centro",
-      "city": "Curitiba",
-      "state": "PR",
-      "postalCode": "80000000",
-      "addressType": "1"
-    },
-    {
-      "street": "Rua Teste 2",
-      "number": "456",
-      "complement": "Apartamento",
-      "district": "Centro",
-      "city": "Curitiba",
-      "state": "PR",
-      "postalCode": "80000000",
-      "addressType": "0"
-    }
-  ]
+  "name": "Comprador",
+  "email": "comprador@ex.com",
+  "password": "123",
+  "role": "COMPRADOR"
 }
 
 
@@ -40,8 +18,8 @@ POST http://localhost:8080/auth/authenticate
 Content-Type: application/json
 
 {
-  "email": "couves@example.com",
-  "password": "123456"
+  "email": "comprador@ex.com",
+  "password": "123"
 }
 
 @auth_token = {{postAuthentication.response.body.token}};
@@ -49,29 +27,31 @@ Content-Type: application/json
 
 
 ### BUSCA PAGINADA DE USUÁRIOS
-GET http://localhost:8080/auth/user/3
+GET  http://localhost:8080/auth/user/5
 Authorization: Bearer {{auth_token}}
 
+
 ### Alterar dados do usuário
-PUT http://localhost:8080/auth/user/3
+PUT http://localhost:8080/auth/user/4
+Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 {
-  "name": "João das Coves",
-  "email": "couves@example.com",
-  "role": "COMPRADOR",
+  "name": "teste alterado",
   "addresses": [
     {
-      "street": "Rua 0",
-      "number": "123",
-      "complement": "Casa",
+      "street": "Rua 1000",
+      "number": "asd",
+      "complement": "AP",
       "district": "Centro",
-      "city": "Curitiba",
+      "city": "Cascavel",
       "state": "PR",
-      "postalCode": "80000000",
+      "postalCode": "854400000",
       "addressType": "1"
     }
   ]
 }
 
-
+### DELETAR USUÁRIO
+DELETE http://localhost:8080/auth/user/5
+Authorization: Bearer {{auth_token}}
