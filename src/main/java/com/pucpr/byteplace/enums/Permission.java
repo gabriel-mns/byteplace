@@ -1,6 +1,7 @@
 package com.pucpr.byteplace.enums;
 
 public enum Permission {
+    
     CADASTRAR_PRODUTO,
     EDITAR_PRODUTO,
     EXCLUIR_PRODUTO,
